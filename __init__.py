@@ -15,6 +15,30 @@ from ovos_utils import classproperty
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_utils.log import LOG
 #
+DEFAULT_SETTINGS = {
+    "__mycroft_skill_firstrun": false,
+    "radios": {
+        "server1": {
+            "ip": "IP_1",
+            "port": ""
+        },
+        "server2": {
+            "ip": "IP_2",
+            "port": ""
+        }
+    },
+    "stations": {
+        "station_id_1": {
+            "name": "name_1",
+            "place": 0
+        },
+        "station_id_2": {
+            "name": "name_2",
+            "place": 1
+        }
+    }
+}
+self.settings.merge(DEFAULT_SETTINGS, new_only=False)
 
 class MyMpdPlaylist(MycroftSkill):
     @classproperty
