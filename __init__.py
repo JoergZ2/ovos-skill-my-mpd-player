@@ -14,7 +14,7 @@ from mpd import CommandError as mce
 from ovos_utils import classproperty
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_utils.log import LOG
-#
+##
 
 class MyMpdPlaylist(MycroftSkill):
     @classproperty
@@ -43,14 +43,9 @@ class MyMpdPlaylist(MycroftSkill):
                 }
             },
             "stations": {
-                "station_id_1": {
-                    "name": "name_1",
-                    "place": 0
-                },
-                "station_id_2": {
-                    "name": "name_2",
-                    "place": 1
-                }
+                "station_name_1": 0,
+                "station_alt_name_1": 0,
+                "station_name_2": 1
             }
         }
         self.settings.merge(DEFAULT_SETTINGS, new_only=False)
@@ -62,6 +57,7 @@ class MyMpdPlaylist(MycroftSkill):
 
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
+        self.stations = self.settings.get('stations')
 
     
 #Basic MPD functions
@@ -109,6 +105,12 @@ class MyMpdPlaylist(MycroftSkill):
         else:
             self.speak_dialog('radio_error', {"radio": placement})
             return
+
+#normalizing of station names
+    def normalize_station(self,station):
+        station = station.lower()
+        station = station.replace(" ","_")
+        return station
 
 #fallback dialog if no device's placement is set (should work ;-))    
     def select_location(self):
@@ -213,6 +215,11 @@ class MyMpdPlaylist(MycroftSkill):
         list_pos = int(pos)
         list_pos = list_pos -1
         mpcc.play(list_pos)
+        self.close_connection()
+
+    def switch_to_station(self,placement,pos):
+        self.open_connection(placement)
+        mpcc.play(pos)
         self.close_connection()
 
     def speak_current_title(self, placement):
@@ -457,6 +464,19 @@ class MyMpdPlaylist(MycroftSkill):
         if placement != None:
             self.switch_to_last(placement)
 
+    @intent_handler('station_by_name.intent')
+    def handle_station_by_name(self, message):
+        LOG.info("Enter switch to station")
+        station = message.data.get('station', None)
+        if station != None:
+            station = self.normalize_station(station)
+            pos = self.stations['station']
+            placement = self.check_placement(message)
+            self.switch_to_station(placement,pos)
+        else:
+            self.speak_dialog('station_not_found.dialog')
+
+        
     @intent_handler(IntentBuilder("volume_down.intent")
                                   .require("DeviceKeyword")
                                   .require("LessKeyword")
