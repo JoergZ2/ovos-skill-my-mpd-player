@@ -31,7 +31,7 @@ class MyMpdPlaylist(MycroftSkill):
 
     def initialize(self):
         DEFAULT_SETTINGS = {
-            "__mycroft_skill_firstrun": false,
+            "__mycroft_skill_firstrun": "false",
             "radios": {
                 "server1": {
                 "ip": "IP_1",
@@ -47,7 +47,7 @@ class MyMpdPlaylist(MycroftSkill):
                     "name": "name_1",
                     "place": 0
                 },
-            "station_id_2": {
+                "station_id_2": {
                     "name": "name_2",
                     "place": 1
                 }
