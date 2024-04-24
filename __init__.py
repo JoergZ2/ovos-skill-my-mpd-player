@@ -48,7 +48,7 @@ class MyMpdPlaylist(MycroftSkill):
                 "station_name_2": 1
             }
         }
-        self.settings.merge(DEFAULT_SETTINGS, new_only=True)
+        #self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
         self.same_device = DeviceApi()
