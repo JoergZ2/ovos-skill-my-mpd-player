@@ -48,7 +48,7 @@ class MyMpdPlaylist(MycroftSkill):
                 "station_name_2": 1
             }
         }
-        self.settings.merge(DEFAULT_SETTINGS, new_only=False)
+        self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
         self.same_device = DeviceApi()
@@ -96,7 +96,6 @@ class MyMpdPlaylist(MycroftSkill):
         placement = message.data.get('placement')
         if not placement:
             placement = location.lower()
-            LOG.info("Placement: " + placement)
         else:
             placement = placement.lower()
         result = self.radios.get(placement)
@@ -118,7 +117,6 @@ class MyMpdPlaylist(MycroftSkill):
         #placement  = self.ask_selection(list(self.placements.keys()))
         placement  = self.ask_selection(['Büro', 'Werkstatt'])
         self.speak(placement)
-        LOG.info("Info aus select_location: " + str(type(placement)))
         return placement
 
 #transforms complex list/dictionary results to speakable text
@@ -422,22 +420,6 @@ class MyMpdPlaylist(MycroftSkill):
         placement = self.check_placement(message)
         if placement != None:
             self.switch_to_pos(placement, pos)
-        #else:
-            #self.speak_dialog('radio_error',{"radio": placement[1]})
-            #pass
-        #sess = SessionManager.get(message)
-        #location = sess.site_id
-        #pos = message.data.get('pos_nr')
-        #placement = message.data.get('placement')
-        #if not placement:
-            #placement = location
-            ##placement = self.select_location() 
-        #pos = extract_number(pos); pos = int(pos)
-        #LOG.info("Placement in pos.intent: " + placement)
-        #if location == '':
-            #location = "Nicht gesetzt!"
-        #LOG.info("Info aus pos.intent location: " + location)
-        #self.switch_to_pos(placement, pos)
 
     @intent_handler('pos_next.intent')
     def handle_pos_next(self, message):
@@ -451,13 +433,13 @@ class MyMpdPlaylist(MycroftSkill):
         placement = self.check_placement(message)
         if placement != None:
             self.switch_to_previous(placement)
-    
+
     @intent_handler('pos_first.intent')
     def handle_pos_first(self, message):
         placement = self.check_placement(message)
         if placement != None:
             self.switch_to_first(placement)
-    
+
     @intent_handler('pos_last.intent')
     def handle_pos_last(self, message):
         placement = self.check_placement(message)
@@ -466,24 +448,26 @@ class MyMpdPlaylist(MycroftSkill):
 
     @intent_handler('station_by_name.intent')
     def handle_station_by_name(self, message):
-        LOG.info("Enter switch to station")
-        station = message.data.get('station', None)
-        if station != None:
-            station = self.normalize_station(station)
-            pos = self.stations['station']
+        station = message.data.get('station')
+        station = self.normalize_station(station)
+        if station in self.stations:
+            pos = self.stations[station]
             placement = self.check_placement(message)
             self.switch_to_station(placement,pos)
         else:
-            self.speak_dialog('station_not_found.dialog')
+            wrong_station = station
+            self.speak_dialog('station_not_found', {'wrong_station': wrong_station})
+            LOG.info("Wrong station: " + str(wrong_station))
 
-        
-    @intent_handler(IntentBuilder("volume_down.intent")
-                                  .require("DeviceKeyword")
-                                  .require("LessKeyword")
-                                  .require("FunctionKeyword"))
-    #@intent_handler('vol_down.intent')
+
+#    @intent_handler(IntentBuilder("volume_down.intent")
+#                                  .require("DeviceKeyword")
+#                                  .require("LessKeyword")
+#                                  .require("FunctionKeyword"))
+    @intent_handler('vol_down.intent')
     def volume_down(self, message):
         placement = self.check_placement(message)
+        LOG.info("Placement: " + placement)
         if placement != None:
             self.vol_down(placement)
 
@@ -491,7 +475,7 @@ class MyMpdPlaylist(MycroftSkill):
                                   .require("DeviceKeyword")
                                   .require("MoreKeyword")
                                   .require("FunctionKeyword"))
-    #@intent_handler('vol_up.intent')
+    @intent_handler('vol_up.intent')
     def volume_up(self, message):
         placement = self.check_placement(message)
         if placement != None:

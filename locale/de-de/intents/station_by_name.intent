@@ -1,6 +1,2 @@
-(wähle | spiele) station {station} am radio (in | im | in der | ) {placement}
-(wähle | spiele) sender {station} am radio (in | im | in der | ) {placement}
-(wähle | spiele) {station} am radio (in | im | in der | ) {placement}
-(wähle | spiele) radiosender {station} am radio (in | im | in der | ) {placement}
-(wähle | spiele) radio-sender {station} am radio (in | im | in der | ) {placement}
-(wähle | spiele) radio sender {station} am radio (in | im | in der | ) {placement}
+am radio (in der | im ) {placement} (spiele | spiel | wähle) (den | die | ) (sender | station ) {station}
+(wähle | spiele | spiel) (sender | station) {station} am radio (in der | im) {placement}
