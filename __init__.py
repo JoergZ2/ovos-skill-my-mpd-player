@@ -35,11 +35,11 @@ class MyMpdPlaylist(MycroftSkill):
             "radios": {
                 "server1": {
                 "ip": "IP_1",
-                "port": ""
+                "port": 6600
                 },
                 "server2": {
                 "ip": "IP_2",
-                "port": ""
+                "port": 6600
                 }
             },
             "stations": {
@@ -48,7 +48,7 @@ class MyMpdPlaylist(MycroftSkill):
                 "station_name_2": 1
             }
         }
-        #self.settings.merge(DEFAULT_SETTINGS, new_only=True)
+        self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
         self.same_device = DeviceApi()
@@ -63,7 +63,7 @@ class MyMpdPlaylist(MycroftSkill):
 #Basic MPD functions
     def open_connection(self, radio):
         host = self.radios[radio]['ip']
-        port = self.radios[radio]['port'].replace("", "6600")
+        port = self.radios[radio]['port']
         eval(port)
         self.close_connection()
         try:

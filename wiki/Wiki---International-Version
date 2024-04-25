@@ -1,0 +1,338 @@
+<a href="https://github.com/JoergZ2/ovos-skill-my-mpd-player/wiki/Wiki---Deutsche-Version">German Version (Deutsche Version)</a>
+## Preliminary note
+This skill tries to make the handling of saved playlists for the player MPD comfortable. There is a very good [MPD skill from forslund](https://github.com/forslund/mpd_skill). If you don't use playlists, but only have a collection of music files, you should use his skill.
+If you can answer three or more questions with yes, you should try this skill:
+Are different playlists used in MPD?
+Is there more than one MPD player in the network?
+Is there more than one OVOS system in the house / apartment or are you using Hivemind-Listener Hive-Voice-Satellite?
+Do you want to be able to control all MPD players with all OVOS systems?
+
+Under not fully reproducible conditions, conflicts with OVOS-OCP skill/plugin may occur. Please report on this at Issues.
+
+<p>For users who have compiled their own playlists, especially if they include internet radio streams, my skill might be helpful.</p>
+
+## Hints for the configuration of the skill:
+Location: /home/$USER/.config/mycroft/skills/ovos-skill-my-mpd-player.joergz2/settings.json
+**Be carefull to edit this configuration file. Syntax faults will be punished by deleting the whole file. Use a JSON file checker or an IDE as VSC to generate a valid file.**
+After installation you have this settings.json:
+`    {
+        "__mycroft_skill_firstrun": false,
+        "radios": {
+            "server1": {
+                "ip": "IP_1",
+                "port": 6600
+            },
+            "server2": {
+                "ip": "IP_2",
+                "port": 6600
+            }
+        },
+        "stations": {
+            "station_1": 0,
+            "station_2": 1
+        }
+    }
+`
+## Notes
+General: use lower chars only
+Section "radios"
+server1: replace with the real name. Name normally refers to a room which MPD device is located. Using Hive-Voice-Satellite name of satellite must be identically to server1 if both are in the same room. This would make the explicit naming of the room in which you are already located superfluous<br>
+IP_1: IP address of first MPD server
+6600: standard port of MPD. Only cange if another port is set.
+You can add as much servers as you want. Last server has no comma at the end (strict JSON syntax needed).
+
+Section "stations"
+This is only helpful if the playlist is always the same and the individual items in the playlist are to be selected using a name (station name). You can select a song or a station by calling the position number everytime.
+
+Another difference (from forslund's skill) is that this skill is designed to manage multiple MPD servers. It is rather not well suited to manage an MPD installation on the same device that OVOS is running on. This is because if MPD is running on the same device that OVOS is installed on.
+
+## Conflicts
+
+There is an occasional conflict with the volume-speaker skill. It uses the same words as this skill for volume control. However, in the MPD skill the volume of the output signal of the MPD server is controlled with values from 0 to 100. The volume control in the volume-skill addresses the master channel of the ALSA mixer (in steps from 1-10). You can also think of it like this: MPD has its own preamp that can be controlled and ALSA is the power amp.
+
+If the standard volume-skill is active, this can easily lead to a request for volume increase being countered by the system with the announcement that the maximum has already been reached. Nevertheless, the sound reproduction is too quiet. The reason for this can be a too low "preamplification" of the input channel of ALSA (e.g. "Headphone") or a too low output level of MPD itself. The whole audio topic is still complicated under Linux. There would be other solutions. But this is rather a topic that should be negotiated under issues.
+
+If you don't want to uninstall the default volume-skill, it's best to contact me via Issues to implement another solution.
+
+## Voice control information
+### Voice commands
+The original language is german, a further localization by the author is only available for en-us. The revision of the en-us files and further localizations are welcome and will be taken over with pleasure!
+
+### More Example Sentences
+#### The current output
+Turn on the radio (if OVOS or Hive-Voice-Satellite and MPD are in the same room) or<br>
+Turn on the radio in the kitchen (if MPD is in a different room than OVOS or Hive-Voice-Satellite)<br>
+Turn the radio [in the kitchen] off
+
+#### Current Playlist
+Play track (or station or position) one (in the same room) or<br>
+Play track one _on the radio in the workshop_ (if MPD in another room)<br>
+(In the other examples, I will omit the addition of "on the radio in ..." because that applies to all intents.)<br>
+Play the next station<br>
+Play the previous station<br>
+Play the first station<br>
+Play the last station<br>
+Plays station five (three, seven,...)<br>
+
+*or*
+
+Play station *station name* (from settings.json) (in the same room) or<br>
+Play station station name  *on the radio in the workshop* (if MPD in another room)<br>
+
+#### Saved playlists
+Which playlists are there<br>
+Open playlist [name] and play song (station | title) one (three | five | ..)<br>
+
+#### Information and search
+What am I listening to<br>
+Which songs (titles | songs) are on the current list (search in current playlist)<br>
+Search [keyword] in any list (search in all playlists)<br>
+
+#### Database search
+Search [keyword] in the music database<br>
+Search [keyword] in the music database and play song (title | song) one (three, seven…)<br>
+
+## Reference files in the locale/[language code] directory
+### Files in Folder en-us
+#### Intent Files
+**info_current_list.intent**<br>
+which (songs | titles | songs | stations | channels) are on the current (list | playlist | playlist)?<br>
+which (songs | titles | songs | stations | channels) are on the radio (in | in the) {placement} on the current (list | playlist | playlist)<br>
+<br>
+**info_current_title.intent**<br>
+What do (I | we) (hear | listen) right now<br>
+What do (I | we) (hear | listen)<br>
+What (am I | are we) listening<br>
+What is playing<br>
+Read the current title from the radio (in the | at) {placement}<br>
+What (I'm listening to) (we're listening to) on the radio (in the) {placement}<br>
+What is played (on | in) radio (in the | in) {placement}<br>
+what is playing (on | in) radio (in the | in) {placement}<br>
+What (I | we) are listening to (on | from) radio<br>
+<br>
+**playlist_replace_and_play.intent**<br>
+(open | load) (playlist | playlist | list | the playlist | the list) {playlist} and play (song | title | number | position | channel | sender) {pos_nr}<br>
+(open | load) (playlist | playlist | list) {playlist} on (radio | device) {placement} and play (song | title | number | position | channel | sender) {pos_nr}<br>
+(open | load) (playlist | playlist | list) {playlist} on (radio | device) (in | in the) {placement} and play (song | title | number | position | channel | sender) {pos_nr}<br>
+<br>
+**playlist_stored.intent**<br>
+What are the playlists on the radio (at | in} {placement}<br>
+List the playlists on the radio (in the) {placement}<br>
+Which (playlists | playlist) are there<br>
+<br>
+**pos.intent**<br>
+(choose | play | switch to) (station | channel | song | number | position | title | place) {pos_nr} on (radio | device) (in | in the) {placement}<br>
+(choose | play | switch to) on (radio | device) (in | in the) {placement} (station | channel | song | song | number | position | title | place) {pos_nr}<br>
+(choose | play | switch to) (station | channel | song | song | number | position | title | place) {pos_nr}<br>
+<br>
+**pos.intent.orig**<br>
+(wähle | spiele | wechsel zu) am (radio | gerät) {radio} (sender | kanal | lied | song | nummer | position | titel | platz) {pos_nr}<br>
+(wähle | spiele | wechsel zu) am (radio | gerät) (im | in der) {radio} (sender | kanal | lied | song | nummer | position | titel | platz) {pos_nr}<br>
+<br>
+**pos_first.intent**<br>
+(choose | games | change to) the first (station | channel | song | number | position | title)<br>
+(choose | games | switch to) on (radio | device) (in | the) {placement} first (station | channel | song | number | position | title)<br>
+(choose | play | switch to) on (radio | device) {placement} the first (station | channel | song | number | position | title)<br>
+<br>
+**pos_last.intent**<br>
+(choose | games | change to) the last (station | channel | song | number | position | title)<br>
+(choose | games | switch to) on (radio | device) (in | the) {placement} last (station | channel | song | number | position | title)<br>
+(choose | play | switch to) on (radio | device) {placement} the last (station | channel | song | number | position | title)<br>
+<br>
+**pos_next.intent**<br>
+(choose | games | change to) next (station | channel | song | number | position | title)<br>
+(choose | games | switch to) on (radio | device) (in | the) {placement} next (station | channel | song | number | position | title)<br>
+(choose | play | switch to) on (radio | device) {placement} next (station | channel | song | number | position | title)<br>
+<br>
+**pos_previous.intent**<br>
+(choose | games | change to) previous (station | channel | song | number | position | title)<br>
+(choose | games | switch to) on (radio | device) (in | the) {placement} previous (station | channel | song | number | position | title)<br>
+(choose | play | switch to) on (radio | device) {placement} previous (station | channel | song | number | position | title)<br>
+<br>
+**search.intent**<br>
+(search | find | is there) on (radio | device) (in the | in) {placement} on the (list | playlist | playlist) {query}<br>
+(search | find | is there) {query} (in the | on the) (list | playlist | playlist)<br>
+<br>
+**search_add_play_database.intent**<br>
+(search | find) {query} (in the music database | in the music collection) and play (song | title | song | place | channel | number) {pos_nr}<br>
+(search | find) {query} (in the music database | in the music collection) and play (song | title | song | place | channel | number) {pos_nr} on the radio (in | in the) {placement}<br>
+<br>
+**search_all_playlists.dialog**<br>
+I found the search term {query} in the playlist {playlist} at position {pos}. The title is {name}.<br>
+<br>
+**search_all_playlists.intent**<br>
+(search | find) {query} in (all | any) (list | lists | playlist | playlists)<br>
+(is there | do we have) {query} in any (list | playlist)<br>
+<br>
+**search_in_database.intent**<br>
+(search | find) {query} (in the music database | in the music collection)<br>
+<br>
+**start_mpd.intent**<br>
+(Make | turn on) (the radio | the music)<br>
+(Make | turn on) (the radio | the music) (in | in the) {placement} on<br>
+<br>
+**stop_mpd.intent**<br>
+Turn off (the radio | the music)<br>
+(Make | turn) (the radio | the music) (in | in the) {placement} off<br>
+<br>
+**vol_down.intent**<br>
+make (radio | the radio | music player | the music player | mpd) a little lower<br>
+make the  (radio | the radio | music player | the music player | mpd) (in | in the) {placement} a little lower<br>
+make  (radio | the radio | music player | the music player | mpd) (in | in the) {placement} a little lower<br>
+<br>
+**vol_set_to.intent**<br>
+(make | adjust | set | turn) the volume  on (the radio | radio | the music player | music player | mpd) on {pos_nr}<br>
+(make | adjust | set | turn) the volume on {pos_nr}<br>
+(make | adjust | set | turn) the volume on (the radio | radio | the music player | music player | mpd) (in | in the) {placement} to {pos_nr}<br>
+<br>
+**vol_up.intent**<br>
+make (radio | the radio | music player | the music player | mpd) a little louder<br>
+make  (radio | the radio | music player | the music player | mpd) (in | in the) {placement} a little louder<br>
+make  (radio | the radio | music player | the music player | mpd) (in | in the) {placement} a bit louder</p>
+
+### Entity Files
+**placement.entity**<br>
+:0<br>
+
+**playlist.entity**<br>
+:0
+
+**pos_nr.entity**<br>
+#<br>
+##<br>
+###<br>
+
+**query.entity**<br>
+:0<br>
+
+**radio.entity**<br>
+:0<br>
+
+### Dialog Files
+**cancel.dialog**<br>
+Operation canceled.
+
+**changed_to.dialog<br>
+switching to song number {pos_nr} 
+
+**device_not_running.dialog**<br>
+The server is not available!
+
+**error_in_function_current_playlist.dialog**<br>
+An error occured in function search in current playlist
+
+**feedback_query.dialog**<br>
+Here is what I understand: {query} Is that correct?
+
+**missunderstand_query.dialog**<br>
+Please restart the search in the music database!
+
+**missunderstand_selection.dialog**<br>
+Didn't understand in which data field to search
+
+**mpd_connect.dialog**<br>
+Connected!
+
+**mpd_error.dialog**<br>
+An error has occurred in module M P D.
+
+**mpd_not_running.dialog**<br>
+M P D is not running on the specified device!
+
+**no_result.dialog**<br>
+Looking for {query} in data field {selection} had no results.
+
+**playlist_not_found.dialog**<br>
+playlist not found
+
+**query_found.dialog**<br>
+place {pos} {name}<br>
+line {pos} {name}
+
+**query_not_found.dialog**<br>
+The title {query} you are looking for does not exist.
+
+**some_error.dialog**<br>
+Some error has occurred
+
+**speak_current_title.dialog**<br>
+place {pos} {title}<br>
+line {pos} {title}
+
+**speak_current_title_artist.dialog**<br>
+place {pos} {title} from {artist}<br>
+line {pos} {title} from {artist}
+
+**starting_with_number_one.dialog**<br>
+I start the new playlist with place 1.
+
+**term_not_found.dialog**<br>
+Search term {query} not found in any playlist.
+
+**to_play.dialog**<br>
+Should I play one of the titles or one station? Answer yes or no.<br>
+
+**what_to_search_in_database.dialog**<br>
+What should I search for? Name the search term
+
+**where_to_play.dialog**<br>
+On which radio should the music be played
+
+**which_data_field.dialog**<br>
+In which category should I search
+
+**which_playlist_to_play.dialog**<br>
+Which playlist should I open? Give a name or keep silent if you don't want to load a new play list
+
+**which_position_to_play.dialog**<br>
+Name a position.
+
+**which_title_to_play.dialog**<br>
+The search result includes {numbers} titles. Which title should I play? Say all, nothing or name a starting number, highest {numbers}
+
+### Voc Files
+**album.voc**<br>
+album<br>
+cd
+
+**all.voc**<br>
+all
+
+**artist.voc**<br>
+artist<br>
+singer<br>
+band<br>
+group
+
+**cancel.voc**<br>
+Stopped searching
+
+**genre.voc**<br>
+genre<br>
+style<br>
+music style<br>
+type
+
+**no.voc**<br>
+no<br>
+nope<br>
+never
+
+**nothing.voc**<br>
+nothing<br>
+none<br>
+no one
+
+**title.voc**<br>
+titel<br>
+song
+
+**yes.voc**<br>
+yes<br>
+yeah<br>
+right
+
+
+## About Functions
+<p>A major challenge has been the different appearance of how MP3 files, internet streams and podcasts can be represented in MPD playlists. This skill can currently only work with playlists in m3u format or URL format. Other playlist formats are currently not supported for sure or have not been tested. But the supported formats alone required sometimes quite complex evaluations to make any speakable statements from them. Hopefully this will work in other languages as well.<br>
+I tried to give the functions "speaking" self-explanatory names. Additionally there is an explanatory comment line above some functions.
