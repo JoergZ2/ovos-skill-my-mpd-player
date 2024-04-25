@@ -3,20 +3,52 @@
     "radios": {
         "büro": {
             "ip": "192.168.178.90",
-            "port": ""
+            "port": 6600
         },
         "werkstatt": {
             "ip": "192.168.178.29",
-            "port": ""
+            "port": 6600
+        },
+        "server1": {
+            "ip": "IP_1",
+            "port": 6600
+        },
+        "server2": {
+            "ip": "IP_2",
+            "port": 6600
         }
     },
     "stations": {
         "deutschlandfunk": 0,
         "dlf": 0,
-        "dlf_kultur": 1,
         "deutschlandfunk_kultur": 1,
-        "dlf_nova": 2,
+        "nova": 2,
         "deutschlandfunk_nova": 2,
-        "nova": 2
+        "dlf_nova": 2,
+        "ndr_1": 3,
+        "ndr_2": 4,
+        "ndr_90_3": 5,
+        "ndr_info": 6,
+        "ndr_kultur": 7,
+        "wdr_5": 8,
+        "wdr_2": 9,
+        "wdr_3": 10,
+        "bayern_3_klassik": 11,
+        "chillout": 12,
+        "1live": 13,
+        "1_live": 13,
+        "wdr_cosmo": 14,
+        "radio_zusa": 15,
+        "ndr_joy": 16,
+        "ndr_n_-_joy": 16,
+        "ffh_lounge": 17,
+        "ffh_rock": 18,
+        "ffh_soundtrack": 19,
+        "ffh_top_40": 20,
+        "rock_and_blues": 21,
+        "rock_n_blues": 21,
+        "rock'n_blues": 21,
+        "rock_n'_blues": 21,
+        "blues_radio": 22
     }
 }
