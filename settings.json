@@ -3,19 +3,19 @@
     "radios": {
         "büro": {
             "ip": "192.168.178.90",
-            "port": 6600
+            "port": ""
         },
         "werkstatt": {
             "ip": "192.168.178.29",
-            "port": 6600
+            "port": ""
         },
         "server1": {
             "ip": "IP_1",
-            "port": 6600
+            "port": ""
         },
         "server2": {
             "ip": "IP_2",
-            "port": 6600
+            "port": ""
         }
     },
     "stations": {
@@ -49,6 +49,7 @@
         "rock_n_blues": 21,
         "rock'n_blues": 21,
         "rock_n'_blues": 21,
-        "blues_radio": 22
+        "blues_radio": 22,
+        "station_name_2": 1
     }
 }

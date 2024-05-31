@@ -1,2 +1,3 @@
 [ovos.plugin.skill]
-ovos-skill-my-mpd-player.joergz2 = ovos_skill_my_mpd_player:MyMpdPlaylist
+ovos-skill-my-mpd-player.joergz2=ovos_skill_my_mpd_player:MyMpdPlaylist
+

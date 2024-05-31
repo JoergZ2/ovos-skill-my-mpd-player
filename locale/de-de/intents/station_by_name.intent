@@ -1,2 +1,3 @@
-am radio (in der | im ) {placement} (spiele | spiel | wähle) (den | die | ) (sender | station ) {station}
-(wähle | spiele | spiel) (sender | station) {station} am radio (in der | im) {placement}
+am radio (in der | im | ) ({placement}| ) (spiele | spiel | wähle) (den | die | ) (sender | station ) {station}
+am radio (in der | im | ) ({placement} | ) (wähle | spiele | spiel) (sender | station) {station}
+(wähle | spiele | spiel) (sender | station) {station} am radio (in der | im | ) ({placement} | )

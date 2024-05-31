@@ -1,10 +1,11 @@
-Metadata-Version: 2.1
+Metadata-Version: 1.0
 Name: ovos-skill-my-mpd-player
 Version: 0.0.1
 Summary: Skill for controlling MPD
 Home-page: https://github.com/JoergZ2/ovos-skill-my-mpd-player
 Author: JoergZ2
-Author-email: 
+Author-email: UNKNOWN
 License: Apache2.0
+Description: UNKNOWN
 Keywords: ovos skill plugin
-License-File: LICENSE
+Platform: UNKNOWN

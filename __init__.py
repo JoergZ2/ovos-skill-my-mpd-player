@@ -35,11 +35,11 @@ class MyMpdPlaylist(MycroftSkill):
             "radios": {
                 "server1": {
                 "ip": "IP_1",
-                "port": 6600
+                "port": ""
                 },
                 "server2": {
                 "ip": "IP_2",
-                "port": 6600
+                "port": ""
                 }
             },
             "stations": {
@@ -63,7 +63,7 @@ class MyMpdPlaylist(MycroftSkill):
 #Basic MPD functions
     def open_connection(self, radio):
         host = self.radios[radio]['ip']
-        port = self.radios[radio]['port']
+        port = self.radios[radio]['port'].replace("", "6600")
         eval(port)
         self.close_connection()
         try:
@@ -90,13 +90,12 @@ class MyMpdPlaylist(MycroftSkill):
 
 #Helper functions
 #replaces device's IP if no placement has been spoken
-    def check_placement(self, message):
-        sess = SessionManager.get(message)
-        location = sess.site_id
-        placement = message.data.get('placement')
+    def check_placement(self, location, placement):
+        if location != None and placement != None:
+            placement = placement.lower()
         if not placement:
             placement = location.lower()
-        else:
+        if not location:
             placement = placement.lower()
         result = self.radios.get(placement)
         if result != None:
@@ -104,6 +103,13 @@ class MyMpdPlaylist(MycroftSkill):
         else:
             self.speak_dialog('radio_error', {"radio": placement})
             return
+
+    def extract_placement(self, message):
+        sess = SessionManager.get(message)
+        location = sess.site_id.lower()
+        placement = message.data.get('placement', None)
+        placement = self.check_placement(location, placement)
+        return placement
 
 #normalizing of station names
     def normalize_station(self,station):
@@ -403,13 +409,13 @@ class MyMpdPlaylist(MycroftSkill):
 #Intent handlers
     @intent_handler('start_mpd.intent')
     def handle_start_mpd(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.start_mpd(placement)
         
     @intent_handler('stop_mpd.intent')
     def handle_stop_mpd(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.stop_mpd(placement)
         
@@ -417,32 +423,31 @@ class MyMpdPlaylist(MycroftSkill):
     def handle_switch_to_pos(self, message):
         pos = message.data.get('pos_nr')
         pos = extract_number(pos); pos = int(pos)
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_pos(placement, pos)
 
     @intent_handler('pos_next.intent')
     def handle_pos_next(self, message):
-        placement = message.data.get('message')
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_next(placement)
 
     @intent_handler('pos_previous.intent')
     def handle_pos_previous(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_previous(placement)
 
     @intent_handler('pos_first.intent')
     def handle_pos_first(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_first(placement)
 
     @intent_handler('pos_last.intent')
     def handle_pos_last(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_last(placement)
 
@@ -450,63 +455,43 @@ class MyMpdPlaylist(MycroftSkill):
     def handle_station_by_name(self, message):
         station = message.data.get('station')
         station = self.normalize_station(station)
+        placement = self.extract_placement(message)
         if station in self.stations:
             pos = self.stations[station]
-            placement = self.check_placement(message)
             self.switch_to_station(placement,pos)
         else:
             wrong_station = station
             self.speak_dialog('station_not_found', {'wrong_station': wrong_station})
-            LOG.info("Wrong station: " + str(wrong_station))
 
-
-#    @intent_handler(IntentBuilder("volume_down.intent")
-#                                  .require("DeviceKeyword")
-#                                  .require("LessKeyword")
-#                                  .require("FunctionKeyword"))
     @intent_handler('vol_down.intent')
     def volume_down(self, message):
-        placement = self.check_placement(message)
-        LOG.info("Placement: " + placement)
+        placement = self.extract_placement(message)
         if placement != None:
             self.vol_down(placement)
 
-    @intent_handler(IntentBuilder("volume_up.intent")
-                                  .require("DeviceKeyword")
-                                  .require("MoreKeyword")
-                                  .require("FunctionKeyword"))
     @intent_handler('vol_up.intent')
     def volume_up(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.vol_up(placement)
 
     @intent_handler('vol_set_to.intent')
     def volume_set(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         vol = message.data.get('pos_nr')
         vol = extract_number(vol); vol = int(vol)
         if placement != None:
             self.set_vol(placement, vol)
 
-    #@intent_handler('info_current_title.intent')
-    #def handle_speak_title(self, message):
-        #placement = self.check_placement(message)
-        #if placement != None:
-            #self.speak_current_title(placement)
-        
-    @intent_handler(IntentBuilder("info_current_title.intent")
-                                  .require("ActionKeyword")
-                                  .require("DeviceKeyword")
-                                  .optionally("placement"))
+    @intent_handler('info_current_title.intent')
     def handle_speak_title(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             self.speak_current_title(placement)
 
     @intent_handler('playlist_stored.intent')
     def handle_list_stored_playlists(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             answer = self.list_stored_playlists(placement)
             self.speak(answer)
@@ -526,15 +511,15 @@ class MyMpdPlaylist(MycroftSkill):
     @intent_handler('playlist_replace_and_play.intent')
     def handle_playlist_replace_and_play(self, message):
         playlist = message.data.get('playlist')
-        placement = self.check_placement(message)
         pos = message.data.get('pos_nr')
         pos = extract_number(pos); pos = int(pos)
+        placement = self.extract_placement(message)
         if placement != None:
             self.playlist_replace_and_play(placement, playlist, pos)
 
     @intent_handler('search.intent')
     def handle_search_current_playlist(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         query = message.data.get('query')
         if placement != None:
             answer = self.search_in_current_playlist(placement, query)
@@ -553,7 +538,7 @@ class MyMpdPlaylist(MycroftSkill):
 
     @intent_handler('search_all_playlists.intent')
     def handle_search_all_playlists(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             data = message.data; data = data.keys()
             query = message.data.get('query')
@@ -562,14 +547,14 @@ class MyMpdPlaylist(MycroftSkill):
 
     @intent_handler('info_current_list.intent')
     def handle_speak_current_playlist(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             answer = self.speak_current_list(placement)
             self.speak(answer)
 
     @intent_handler('search_add_play_database.intent')
     def handle_search_in_database(self, message):
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             query = message.data.get('query'); query_dict = {'query': query}
             pos_nr = message.data.get('pos_nr')
@@ -589,8 +574,7 @@ class MyMpdPlaylist(MycroftSkill):
 
     @intent_handler('search_in_database.intent')
     def handle_database_dialog(self, message):
-        #placement = message.data.get('placement')
-        placement = self.check_placement(message)
+        placement = self.extract_placement(message)
         if placement != None:
             query = message.data.get('query'); query_dict = {'query': query}
             if placement != None:
