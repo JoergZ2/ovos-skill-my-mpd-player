@@ -2,4 +2,4 @@
 (wähle | spiele | wechsel zu) (sender | kanal | lied | song | titel ) nummer {pos_nr} (am | im |) (radio | gerät |) (im | in der |) ({placement} |)
 (wähle | spiele | wechsel zu) (am | im |) (radio | gerät |) (im | in der |) ({placement} |) (sender | kanal | lied | song | titel) nummer {pos_nr}
 (wähle | spiele | wechsel zu) (sender | kanal | lied | song | titel) nummer {pos_nr} (am | im |) (radio | gerät |) (im | in der |) ({placement} |)
-(am | im |) (radio | gerät |) (im | in der |) ({placement} |) (wähle | spiele | wechsel zu) (sender | kanal | lied | song | titel) nummer {pos_nr}
+(am | im |) (radio | gerät |) (im | in der |) ({placement} |) (wähle | spiele | wechsel zu) (sender | sendernummer | station | kanal | lied | song | titel) nummer {pos_nr}
