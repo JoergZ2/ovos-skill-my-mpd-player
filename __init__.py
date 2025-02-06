@@ -5,7 +5,7 @@ from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
 #from mycroft.skills import intent_handler
 #from adapt.intent import IntentBuilder
-from lingua.franca import extract_number
+from lingua_franca.parse import extract_number
 from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
