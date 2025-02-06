@@ -14,7 +14,7 @@ from ovos_utils import classproperty
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_utils.log import LOG
 mpcc = MPDClient()
-##
+#
 
 class MyMpdPlaylist(OVOSSkill):
     @classproperty
