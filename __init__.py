@@ -2,9 +2,10 @@ import sys
 import os
 import time
 from ovos_workshop.skills import OVOSSkill
-from mycroft.skills import intent_handler
+from ovos_workshop.decorators import intent_handler
+#from mycroft.skills import intent_handler
 from adapt.intent import IntentBuilder
-from mycroft.util import extract_number
+#from mycroft.util import extract_number
 from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
