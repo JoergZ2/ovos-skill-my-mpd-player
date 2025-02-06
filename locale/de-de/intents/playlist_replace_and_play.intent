@@ -1,4 +1,2 @@
-Öffne (playlist | playliste | liste | die playlist | die playliste | die liste) {playlist} und spiele (lied | titel | nummer | position | kanal | sender) {pos_nr}
-Öffne (playlist | playliste | liste) {playlist} am (radio | gerät) {placement} und spiele (lied | titel | nummer | position | kanal | sender) {pos_nr}
-Öffne (playlist | playliste | liste) {playlist} am (radio | gerät) (im | in der) {placement} und spiele (lied | titel | nummer | position | kanal | sender) {pos_nr}
+Öffne (die | ) (playlist | playliste) {playlist} (am | im | ) (radio | gerät | ) (im | in der | ) ({placement} | ) und spiele (lied | nummer | position) {pos_nr}
 

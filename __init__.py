@@ -1,22 +1,21 @@
 import sys
 import os
 import time
-from ovos_workshop.skills import MycroftSkill
+from ovos_workshop.skills import OVOSSkill
 from mycroft.skills import intent_handler
 from adapt.intent import IntentBuilder
 from mycroft.util import extract_number
 from ovos_backend_client.api import DeviceApi
-#from mycroft.api import DeviceApi
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
-mpcc = MPDClient()
 from mpd import CommandError as mce
 from ovos_utils import classproperty
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_utils.log import LOG
+mpcc = MPDClient()
 ##
 
-class MyMpdPlaylist(MycroftSkill):
+class MyMpdPlaylist(OVOSSkill):
     @classproperty
     def runtime_requirements(self):
         return RuntimeRequirements(internet_before_load=False,
@@ -53,11 +52,11 @@ class MyMpdPlaylist(MycroftSkill):
         self.on_settings_changed()
         self.same_device = DeviceApi()
         self.uuid = self.same_device.uuid
-        #self.same_device = info['description']
 
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
         self.stations = self.settings.get('stations')
+        self.translations = self.settings.get('translations')
 
     
 #Basic MPD functions
@@ -90,7 +89,8 @@ class MyMpdPlaylist(MycroftSkill):
 
 #Helper functions
 #replaces device's IP if no placement has been spoken
-    def check_placement(self, location, placement):
+#necessary for Hivemind clients
+    def check_placement(self, location, placement=None):
         if location != None and placement != None:
             placement = placement.lower()
         if not placement:
@@ -294,7 +294,7 @@ class MyMpdPlaylist(MycroftSkill):
             self.open_connection(placement)
             list_playlist = mpcc.listplaylists()
         except Exception as e:
-            LOGGER.info(str(e))
+            LOG.info(str(e))
         finally:
             self.close_connection()
         names = ''
@@ -305,6 +305,7 @@ class MyMpdPlaylist(MycroftSkill):
         return names
 
     def playlist_replace_and_play(self, placement, playlist, pos):
+        playlist = playlist.lower()
         self.open_connection(placement)
         list_playlist = mpcc.listplaylists()
         for key in range(len(list_playlist)):
@@ -319,7 +320,7 @@ class MyMpdPlaylist(MycroftSkill):
                     mpcc.play((int(pos) -1))
                     time.sleep(.5)
                 except Exception as e:
-                    LOGGER.info("Error: " + str(e))
+                    LOG.info("Error: " + str(e))
                 finally:
                     self.close_connection()
                 break
@@ -453,6 +454,8 @@ class MyMpdPlaylist(MycroftSkill):
 
     @intent_handler('station_by_name.intent')
     def handle_station_by_name(self, message):
+        sess = SessionManager.get(message)
+        location = sess.site_id.lower()
         station = message.data.get('station')
         station = self.normalize_station(station)
         placement = self.extract_placement(message)
@@ -496,11 +499,13 @@ class MyMpdPlaylist(MycroftSkill):
             answer = self.list_stored_playlists(placement)
             self.speak(answer)
             playlist = self.get_response('which_playlist_to_play', num_retries=0)
+            LOG.info(f"Playliste aus Listenansage: {playlist}")
             if playlist == None:
                 self.speak_dialog('cancel')
                 pass
             else:
-                pos_nr = self.get_response('which_position_to_play', num_retries=0)
+                pos_nr = self.get_response('which_position_to_play', num_retries=1)
+                LOG.info(f"Position: {pos_nr}")
                 if pos_nr == None:
                     pos_nr = 1
                     self.speak_dialog('starting_with_number_one')
@@ -559,16 +564,15 @@ class MyMpdPlaylist(MycroftSkill):
             query = message.data.get('query'); query_dict = {'query': query}
             pos_nr = message.data.get('pos_nr')
             pos_nr = extract_number(pos_nr);
+            if pos_nr == "": pos_nr = '0'
             query_correct = self.ask_yesno('feedback_query', query_dict)
             if query_correct == 'yes':
                 selection = self.get_response('which_data_field')
-                if self.voc_match(selection, 'artist'): selection = 'artist'
-                elif self.voc_match(selection, 'title'): selection = 'title'
-                elif self.voc_match(selection, 'album'): selection = 'album'
-                elif self.voc_match(selection, 'genre'): selection = 'genre'
+                selection = selection.lower()
+                selection = self.translations[selection]
+                if selection == "artist" or selection == "title" or selection == "album" or selection == "genre":
+                    self.search_in_database_and_play(placement, query, selection, pos_nr)
                 else: self.speak_dialog('missunderstand_selection')
-                if pos_nr == "": pos_nr = '0'
-                self.search_in_database_and_play(placement, query, selection, pos_nr)
             else:
                 pass
 
@@ -581,29 +585,26 @@ class MyMpdPlaylist(MycroftSkill):
                 query_correct = self.ask_yesno('feedback_query', query_dict)
                 if query_correct == 'yes':
                     selection = self.get_response('which_data_field')
-                    if self.voc_match(selection, 'artist'): selection = 'artist'
-                    elif self.voc_match(selection, 'title'): selection = 'title'
-                    elif self.voc_match(selection, 'album'): selection = 'album'
-                    elif self.voc_match(selection, 'genre'): selection = 'genre'
+                    selection = selection.lower()
+                    selection = self.translations[selection]
+                    if selection == 'artist' or selection == 'title' or selection == 'album' or selection == 'genre':
+                        search_result = self.search_only_in_database(placement, query, selection)
+                        numbers_result = search_result[1]
+                        if numbers_result != 0:
+                            title = self.get_response('which_title_to_play', {'numbers': numbers_result})
+                            if self.voc_match(title, 'nothing'):
+                                pass
+                            elif self.voc_match(title,'all'):
+                                title = 0
+                                self.play_from_database_search(placement, search_result[0], title)
+                            else:
+                                title = extract_number(title)
+                                title = int(title) -1
+                                self.play_from_database_search(placement, search_result[0], title)
+                        else: self.speak_dialog('no_result', {'query': query, 'selection': selection})
                     else: self.speak_dialog('missunderstand_selection')
                 else:
                     self.speak_dialog('missunderstand_query')
-                if selection == 'artist' or selection == 'title' or selection == 'album' or selection == 'genre':
-                    placement = self.check_placement(message)
-                    search_result = self.search_only_in_database(placement, query, selection)
-                    numbers_result = search_result[1]
-                    if numbers_result != 0:
-                        title = self.get_response('which_title_to_play', {'numbers': numbers_result})
-                        if self.voc_match(title, 'nothing'):
-                            pass
-                        elif self.voc_match(title,'all'):
-                            title = 0
-                            self.play_from_database_search(placement, search_result[0], title)
-                        else:
-                            title = extract_number(title)
-                            title = int(title) -1
-                            self.play_from_database_search(placement, search_result[0], title)
-                    else: self.speak_dialog('no_result', {'query': query, 'selection': selection})
     
 
     def stop(self):

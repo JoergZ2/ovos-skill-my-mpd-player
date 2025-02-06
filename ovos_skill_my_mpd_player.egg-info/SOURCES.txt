@@ -68,6 +68,7 @@ locale/de-de/intents/stop_mpd.intent
 locale/de-de/intents/vol_down.intent
 locale/de-de/intents/vol_set_to.intent
 locale/de-de/intents/vol_up.intent
+locale/de-de/intents/volume_down.intent
 locale/de-de/vocabulary/DeviceKeyword.voc
 locale/de-de/vocabulary/SearchKeyword.voc
 locale/de-de/vocabulary/SearchObjcKeyword.voc
