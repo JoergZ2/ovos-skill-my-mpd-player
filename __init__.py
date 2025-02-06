@@ -57,7 +57,7 @@ class MyMpdPlaylist(OVOSSkill):
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
         self.stations = self.settings.get('stations')
-        LOG.info("Stationen: " + self.stations)
+        LOG.info("Stationen: " + str(self.stations))
         self.translations = self.settings.get('translations')
 
     
