@@ -57,7 +57,6 @@ class MyMpdPlaylist(OVOSSkill):
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
         self.stations = self.settings.get('stations')
-        LOG.info("Stationen: " + str(self.stations))
         self.translations = self.settings.get('translations')
 
     
@@ -109,6 +108,7 @@ class MyMpdPlaylist(OVOSSkill):
     def extract_placement(self, message):
         sess = SessionManager.get(message)
         location = sess.site_id.lower()
+        LOG.info("Location: " + str(location))
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
         return placement
