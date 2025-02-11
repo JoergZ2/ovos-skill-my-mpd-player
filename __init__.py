@@ -62,7 +62,6 @@ class MyMpdPlaylist(OVOSSkill):
     
 #Basic MPD functions
     def open_connection(self, radio):
-        LOG.info("IP des Radios: " + str(self.radios[radio]['ip']))
         host = self.radios[radio]['ip']
         port = self.radios[radio]['port'].replace("", "6600")
         eval(port)
@@ -109,7 +108,6 @@ class MyMpdPlaylist(OVOSSkill):
     def extract_placement(self, message):
         sess = SessionManager.get(message)
         location = sess.site_id.lower()
-        LOG.info("Location: " + str(location))
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
         return placement
