@@ -426,6 +426,8 @@ class MyMpdPlaylist(OVOSSkill):
         pos = message.data.get('pos_nr')
         pos = extract_number(pos); pos = int(pos)
         placement = self.extract_placement(message)
+        LOG.info("Placement: " + str(placement))
+        LOG.info("Position: " + str(pos))
         if placement != None:
             self.switch_to_pos(placement, pos)
 
