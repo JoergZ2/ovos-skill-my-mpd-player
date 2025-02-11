@@ -1,6 +1,1 @@
-(wähle | spiele | wechsel zu) (sender | kanal | lied | song | titel ) nummer {pos_nr} (am | im | an dem|) (radio | gerät |) (im | in der |) ({placement} |)
-(wähle | spiele | wechsel zu) (sender | kanal | lied | song | titel ) nummer {pos_nr} (am | im | an dem|) (radio | gerät |) (im | in der |) ({placement} |)
-(wähle | spiele | wechsel zu) (am | im | an dem|) (radio | gerät |) (im | in der |) ({placement} |) (sender | kanal | lied | song | titel) nummer {pos_nr}
-(wähle | spiele | wechsel zu) (sender | kanal | lied | song | titel) nummer {pos_nr} (am | im | an dem|) (radio | gerät |) (im | in der |) ({placement} |)
-(am | im | an dem|) (radio | gerät |) (im | in der |) ({placement} |) (wähle | spiele | wechsel zu) (sender | sendernummer | station | kanal | lied | song | titel) nummer {pos_nr}
-(am | im | an dem|) (radio | gerät |) (im | in der |) ({placement} |) (wähle | spiele | wechsel zu) platz {pos_nr}
+spiele (sender | kanal | lied | eintrag) nummer {pos_nr} am radio [(am|im|in der)] [placement]
