@@ -62,6 +62,7 @@ class MyMpdPlaylist(OVOSSkill):
     
 #Basic MPD functions
     def open_connection(self, radio):
+        LOG.info("IP des Radios: " + str(self.radios[radio]['ip']))
         host = self.radios[radio]['ip']
         port = self.radios[radio]['port'].replace("", "6600")
         eval(port)
