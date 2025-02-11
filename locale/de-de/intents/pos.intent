@@ -1,1 +1,1 @@
-spiele (sender | kanal | lied | eintrag) nummer {pos_nr} am radio [(am|im|in der)] [placement]
+spiele (sender | kanal | lied | eintrag) nummer {pos_nr} (an dem|am) radio [(am|im|in der)] [placement]
