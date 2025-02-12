@@ -1,1 +1,2 @@
 spiele (platz|listenplatz|position|eintrag) {pos_nr} (an dem|am|im|in dem) radio (am|im|in der) ({placement}| )
+(an dem|am|im|in dem) radio (am|im|in der) ({placement}| ) spiele (platz|listenplatz|position|eintrag) {pos_nr}
