@@ -3,7 +3,7 @@ import os
 import time
 from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
-from ovos_workshop.intents import Intent_Builder
+from ovos_workshop.intents import IntentBuilder
 from lingua_franca.parse import extract_number
 from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
