@@ -420,7 +420,12 @@ class MyMpdPlaylist(OVOSSkill):
         if placement != None:
             self.stop_mpd(placement)
         
-    @intent_handler(IntentBuilder('pos2.intent').require('pos_keyword').require('pos_nr').optionally('radio_keyword'))
+    @intent_handler(IntentBuilder('pos2.intent').require("radio_command")
+                    .require('radio_action')
+                    .require('pos_keyword')
+                    .require('pos_nr')
+                    .require('radio_command')
+                    .optionally('radio_keyword'))
     def handle_switch_to_pos_adapt(self, message):
         pos_nr = message.data.get('pos_nr')
         placement = ('radio_keyword')
