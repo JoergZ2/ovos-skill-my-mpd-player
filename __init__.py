@@ -3,8 +3,7 @@ import os
 import time
 from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
-#from mycroft.skills import intent_handler
-#from adapt.intent import IntentBuilder
+from ovos_workshp.intents import Intent_Builder
 from lingua_franca.parse import extract_number
 from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
@@ -421,6 +420,13 @@ class MyMpdPlaylist(OVOSSkill):
         if placement != None:
             self.stop_mpd(placement)
         
+    @intent_handler(IntentBuilder('pos2.intent').require('pos_keyword').require('pos_nr').optionally('radio_keyword'))
+    def handle_switch_to_pos_adapt(self, message):
+        pos_nr = message.data.get('pos_nr')
+        placement = ('radio_keyword')
+        LOG.info("From Adapt intent " + str(pos_nr) + " Placement: " + placement)
+
+
     @intent_handler('pos.intent')
     def handle_switch_to_pos(self, message):
         pos = message.data.get('pos_nr')
