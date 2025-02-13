@@ -424,11 +424,10 @@ class MyMpdPlaylist(OVOSSkill):
                     .require('radio_action')
                     .require('pos_keyword')
                     .require('pos_nr')
-                    .require('radio_command')
                     .optionally('radio_keyword'))
     def handle_switch_to_pos_adapt(self, message):
         pos_nr = message.data.get('pos_nr')
-        placement = ('radio_keyword')
+        placement = message.data.get('radio_keyword')
         LOG.info("From Adapt intent " + str(pos_nr) + " Placement: " + placement)
 
 
