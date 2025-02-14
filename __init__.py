@@ -56,8 +56,7 @@ class MyMpdPlaylist(OVOSSkill):
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
         self.stations = self.settings.get('stations')
-        self.translations = self.settings.get('transl  ssh-keygen -f '/home/jz/.ssh/known_hosts' -R '192.168.178.22'
-ations')
+        self.translations = self.settings.get('translations')
 
     
 #Basic MPD functions
