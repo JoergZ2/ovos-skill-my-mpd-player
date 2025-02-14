@@ -13,7 +13,7 @@ from ovos_utils import classproperty
 from ovos_utils.process_utils import RuntimeRequirements
 from ovos_utils.log import LOG
 mpcc = MPDClient()
-#
+##
 
 class MyMpdPlaylist(OVOSSkill):
     @classproperty
@@ -56,7 +56,8 @@ class MyMpdPlaylist(OVOSSkill):
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
         self.stations = self.settings.get('stations')
-        self.translations = self.settings.get('translations')
+        self.translations = self.settings.get('transl  ssh-keygen -f '/home/jz/.ssh/known_hosts' -R '192.168.178.22'
+ations')
 
     
 #Basic MPD functions
