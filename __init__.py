@@ -422,9 +422,9 @@ class MyMpdPlaylist(OVOSSkill):
      
     @intent_handler('pos5.intent')
     def handle_switch_to_pos(self, message):
-        #pos = message.data.get('pos_nr')
+        pos = message.data.get('pos')
         #pos = extract_number(pos); pos = int(pos)
-        pos = 5
+        #pos = 5
         placement = self.extract_placement(message)
         LOG.info("Placement: " + str(placement))
         LOG.info("Position: " + str(pos))
