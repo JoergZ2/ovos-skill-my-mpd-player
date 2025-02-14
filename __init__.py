@@ -106,7 +106,7 @@ class MyMpdPlaylist(OVOSSkill):
 
     def extract_placement(self, message):
         sess = SessionManager.get(message)
-        location = sess.site_id.lower()
+        location = sess.session_id.site_id.lower()
         LOG.info("SessionManager" + str(sess))
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
