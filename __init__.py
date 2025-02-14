@@ -420,10 +420,11 @@ class MyMpdPlaylist(OVOSSkill):
         if placement != None:
             self.stop_mpd(placement)
      
-    @intent_handler('pos_nr.intent')
+    @intent_handler('pos5.intent')
     def handle_switch_to_pos(self, message):
-        pos = message.data.get('pos_nr')
-        pos = extract_number(pos); pos = int(pos)
+        #pos = message.data.get('pos_nr')
+        #pos = extract_number(pos); pos = int(pos)
+        pos = 5
         placement = self.extract_placement(message)
         LOG.info("Placement: " + str(placement))
         LOG.info("Position: " + str(pos))
