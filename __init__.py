@@ -392,7 +392,8 @@ ations')
             if pos != "": pos = int(pos) -1
             if pos == None: pos = 0
             mpcc.play(pos)
-        except:
+        except:  ssh-keygen -f '/home/jz/.ssh/known_hosts' -R '192.168.178.22'
+
             self.close_connection()
         finally:
             self.close_connection()
@@ -420,18 +421,7 @@ ations')
         placement = self.extract_placement(message)
         if placement != None:
             self.stop_mpd(placement)
-        
-    @intent_handler(IntentBuilder('pos2.intent').require("radio_command")
-                    .require('radio_action')
-                    .require('pos_keyword')
-                    .require('pos_nr')
-                    .optionally('radio_keyword'))
-    def handle_switch_to_pos_adapt(self, message):
-        pos_nr = message.data.get('pos_nr')
-        placement = message.data.get('radio_keyword')
-        LOG.info("From Adapt intent " + str(pos_nr) + " Placement: " + placement)
-
-
+     
     @intent_handler('pos.intent')
     def handle_switch_to_pos(self, message):
         pos = message.data.get('pos_nr')
