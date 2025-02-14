@@ -391,8 +391,7 @@ class MyMpdPlaylist(OVOSSkill):
             if pos != "": pos = int(pos) -1
             if pos == None: pos = 0
             mpcc.play(pos)
-        except:  ssh-keygen -f '/home/jz/.ssh/known_hosts' -R '192.168.178.22'
-
+        except:
             self.close_connection()
         finally:
             self.close_connection()
