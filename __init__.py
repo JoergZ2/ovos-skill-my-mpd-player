@@ -107,7 +107,7 @@ class MyMpdPlaylist(OVOSSkill):
     def extract_placement(self, message):
         sess = SessionManager.get(message)
         location = sess.site_id.lower()
-        LOG.info("Location from extract: " + str(location))
+        LOG.info("SessionManager" + str(sess))
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
         return placement
@@ -425,9 +425,9 @@ class MyMpdPlaylist(OVOSSkill):
     def handle_switch_to_pos(self, message):
         pos = message.data.get('pos')
         #pos = extract_number(pos); pos = int(pos)
-        sess = SessionManager.get(message)
-        location = sess.site_id.lower()
-        LOG.info("Location: " + str(location))
+        #sess = SessionManager.get(message)
+        #location = sess.site_id.lower()
+        #LOG.info("Location: " + str(location))
         placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_pos(placement, pos)
