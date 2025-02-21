@@ -14,6 +14,24 @@ from ovos_utils.process_utils import RuntimeRequirements
 from ovos_utils.log import LOG
 mpcc = MPDClient()
 ##
+DEFAULT_SETTINGS = {
+    "__mycroft_skill_firstrun": "false",
+    "radios": {
+        "server1": {
+        "ip": "IP_1",
+        "port": ""
+        },
+        "server2": {
+        "ip": "IP_2",
+        "port": ""
+        }
+    },
+    "stations": {
+        "station_name_1": 0,
+        "station_alt_name_1": 0,
+        "station_name_2": 1
+    }
+}
 
 class MyMpdPlaylist(OVOSSkill):
     @classproperty
@@ -29,24 +47,6 @@ class MyMpdPlaylist(OVOSSkill):
                                    no_gui_fallback=False)
 
     def initialize(self):
-        DEFAULT_SETTINGS = {
-            "__mycroft_skill_firstrun": "false",
-            "radios": {
-                "server1": {
-                "ip": "IP_1",
-                "port": ""
-                },
-                "server2": {
-                "ip": "IP_2",
-                "port": ""
-                }
-            },
-            "stations": {
-                "station_name_1": 0,
-                "station_alt_name_1": 0,
-                "station_name_2": 1
-            }
-        }
         self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
