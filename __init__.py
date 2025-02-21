@@ -4,7 +4,7 @@ import time
 from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.intents import IntentBuilder
-from lingua_franca.parse import extract_number
+from lingua_franca.parse import extract_numbers
 from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
@@ -424,7 +424,7 @@ class MyMpdPlaylist(OVOSSkill):
     @intent_handler('pos.intent')
     def handle_switch_to_pos(self, message):
         pos = message.data.get('pos')
-        #pos = extract_number(pos); pos = int(pos)
+        #pos = extract_numbers(pos); pos = int(pos)
         #sess = SessionManager.get(message)
         #location = sess.site_id.lower()
         #LOG.info("Location: " + str(location))
@@ -486,7 +486,7 @@ class MyMpdPlaylist(OVOSSkill):
     def volume_set(self, message):
         placement = self.extract_placement(message)
         vol = message.data.get('pos_nr')
-        vol = extract_number(vol); vol = int(vol)
+        vol = extract_numbers(vol); vol = int(vol)
         if placement != None:
             self.set_vol(placement, vol)
 
@@ -521,7 +521,7 @@ class MyMpdPlaylist(OVOSSkill):
     def handle_playlist_replace_and_play(self, message):
         playlist = message.data.get('playlist')
         pos = message.data.get('pos_nr')
-        pos = extract_number(pos); pos = int(pos)
+        pos = extract_numbers(pos); pos = int(pos)
         placement = self.extract_placement(message)
         if placement != None:
             self.playlist_replace_and_play(placement, playlist, pos)
@@ -536,7 +536,7 @@ class MyMpdPlaylist(OVOSSkill):
                 play_title = self.ask_yesno('to_play')
                 if play_title == 'yes':
                     pos_nr = self.get_response('which_position_to_play')
-                    pos_nr = extract_number(pos_nr)
+                    pos_nr = extract_numbers(pos_nr)
                     self.switch_to_pos(placement, pos_nr)
                 elif play_title == 'no':
                     pass
@@ -567,7 +567,7 @@ class MyMpdPlaylist(OVOSSkill):
         if placement != None:
             query = message.data.get('query'); query_dict = {'query': query}
             pos_nr = message.data.get('pos_nr')
-            pos_nr = extract_number(pos_nr);
+            pos_nr = extract_numbers(pos_nr);
             if pos_nr == "": pos_nr = '0'
             query_correct = self.ask_yesno('feedback_query', query_dict)
             if query_correct == 'yes':
@@ -602,7 +602,7 @@ class MyMpdPlaylist(OVOSSkill):
                                 title = 0
                                 self.play_from_database_search(placement, search_result[0], title)
                             else:
-                                title = extract_number(title)
+                                title = extract_numbers(title)
                                 title = int(title) -1
                                 self.play_from_database_search(placement, search_result[0], title)
                         else: self.speak_dialog('no_result', {'query': query, 'selection': selection})
