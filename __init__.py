@@ -5,7 +5,7 @@ from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.intents import IntentBuilder
 from lingua_franca.parse import extract_numbers
-from ovos_backend_client.api import DeviceApi
+#from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
 from mpd import CommandError as mce
@@ -50,7 +50,7 @@ class MyMpdPlaylist(OVOSSkill):
         self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
-        self.same_device = DeviceApi()
+        #self.same_device = DeviceApi()
         self.uuid = self.same_device.uuid
 
     def on_settings_changed(self):
