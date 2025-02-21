@@ -51,7 +51,7 @@ class MyMpdPlaylist(OVOSSkill):
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
         #self.same_device = DeviceApi()
-        self.uuid = self.same_device.uuid
+        #self.uuid = self.same_device.uuid
 
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
