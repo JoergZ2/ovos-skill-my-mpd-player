@@ -601,7 +601,7 @@ class MyMpdPlaylist(OVOSSkill):
                                 title = 0
                                 self.play_from_database_search(placement, search_result[0], title)
                             else:
-                                title = extract_numbers(title)
+                                #title = extract_numbers(title)
                                 LOG.info("Listenplatz aus Database_Dialog: " + str(title))
                                 title = int(title) -1
                                 self.play_from_database_search(placement, search_result[0], title)
