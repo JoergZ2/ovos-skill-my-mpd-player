@@ -18,6 +18,12 @@
             "port": ""
         }
     },
+    "translations": {
+        "künstler": "artist",
+        "titel": "title",
+        "album": "album",
+        "musikrichtung": "genre"
+    },
     "stations": {
         "deutschlandfunk": 0,
         "dlf": 0,

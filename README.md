@@ -37,8 +37,9 @@ In Docker container ovos_core from host ```docker exec ovos_core pip install git
 or with a Docker management environment using the internal console with the command line from virtualenv.
 
 ## Configuration
-At least there are two sections or main keys to configure the skill: "radios" and "stations". The first key is a stamdard OVOS key.
-"radios" contains as much sub-keys as there are MPD instances to control. Each radi jey has the (spoken) name as main key and IP address and an optional key for a non standard port. If port is left empty standard port 6600 is used.
+At least there are three sections or main keys to configure the skill: "radios", "translations" and "stations". The first key is a stamdard OVOS key.
+"radios" contains as much sub-keys as there are MPD instances to control. Each radio key has the (spoken) name as main key and IP address and an optional key for a non standard port. If port is left empty standard port 6600 is used.
+"translations" is neede to translate some key words for database research from your language into MPD terms. See the example below. Keys (left) are my language, right MPD terms.
 "stations" is a key which is filled witcgh an dictionary of (spoken) station names and a position number from playlist. Note that the first position is 0 and not 1. You can use different names for the same postion if the station is known under different names. For transparency I left my private radio stations playlist in this README.md. Station names which have more than one word should be written with underline.
 ```
 {
@@ -60,6 +61,12 @@ At least there are two sections or main keys to configure the skill: "radios" an
             "ip": "IP_2",
             "port": ""
         }
+    },
+    "translations": {
+        "künstler": "artist",
+        "titel": "title",
+        "album": "album",
+        "musikrichtung": "genre"
     },
     "stations": {
         "deutschlandfunk": 0,
