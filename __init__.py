@@ -111,6 +111,24 @@ class MyMpdPlaylist(OVOSSkill):
         placement = self.check_placement(location, placement)
         return placement
 
+#Maintaining function
+    def show_raw_message(self, message, sess=None):
+        """
+        Function to show content of OVOS objects 
+        """
+        LOG.info("Type von sess: " + str(type(message)))
+        message_type = message.msg_type
+        data = list(message.data)
+        context = list(message.context)
+        sess_content = dir(sess)
+        LOG.info("Message-Typ: " + message_type + ", Data: " + str(data) + ", Context: " + str(context) + ", Session_info: " + str(sess_content))
+        utterances = message.data.get('utterances')
+        lang = message.data.get('lang')
+        placement = message.data.get('placement', "Not defined")
+        utterance  = message.data.get('utterance')
+        LOG.info("Raw Message: Utterances: " + str(utterances) + ", language: " + str(lang) + ", Placement: " + str(placement) + ", Utterance: " + str(utterance) +", Site-ID: " + sess.site_id)
+
+
 #normalizing of station names
     def normalize_station(self,station):
         station = station.lower()
