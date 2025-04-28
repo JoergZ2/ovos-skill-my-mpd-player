@@ -1,2 +1,3 @@
-(mache | stelle | setze | drehe) die lautstärke auf {pos_nr}
+(mache | stelle | setze | drehe) die lautstärke am (radio|gerät)  (im | in der |) ({placement} |) auf {pos_nr}
 (mache | stelle | setze | drehe) die lautstärke (am | im | an dem) (radio | gerät |) (im | in der |) ({placement} |) auf {pos_nr}
+(drehe|stelle|mache) die lautstärke auf {pos_nr} am (radio|gerät) (im|in der) ({placement}|)
