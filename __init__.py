@@ -572,7 +572,8 @@ class MyMpdPlaylist(OVOSSkill):
     def handle_playlist_replace_and_play(self, message):
         playlist = message.data.get('playlist')
         pos = message.data.get('pos_nr')
-        pos = extract_numbers(pos); pos = int(pos)
+        #pos = extract_numbers(pos)
+        pos = int(pos)
         placement = self.extract_placement(message)
         if placement != None:
             self.playlist_replace_and_play(placement, playlist, pos)
