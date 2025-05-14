@@ -5,7 +5,6 @@ from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.intents import IntentBuilder
 from lingua_franca.parse import extract_numbers
-#from ovos_backend_client.api import DeviceApi
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
 from mpd import CommandError as mce
@@ -50,8 +49,6 @@ class MyMpdPlaylist(OVOSSkill):
         self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
-        #self.same_device = DeviceApi()
-        #self.uuid = self.same_device.uuid
 
     def on_settings_changed(self):
         self.radios = self.settings.get('radios')
@@ -138,7 +135,6 @@ class MyMpdPlaylist(OVOSSkill):
 #fallback dialog if no device's placement is set (should work ;-))    
     def select_location(self):
         self.speak_dialog('where_to_play')
-        #placement  = self.ask_selection(list(self.placements.keys()))
         placement  = self.ask_selection(['Büro', 'Werkstatt'])
         self.speak(placement)
         return placement
@@ -273,12 +269,32 @@ class MyMpdPlaylist(OVOSSkill):
         mpcc.volume(+5)
         self.close_connection()
 
+    def vol_up_double(self, placement):
+        self.open_connection(placement)
+        mpcc.volume(+10)
+        self.close_connection()
+
+    def vol_up_triple(self, placement):
+        self.open_connection(placement)
+        mpcc.volume(+20)
+        self.close_connection()
+
     def vol_down(self, placement):
         self.open_connection(placement)
         mpcc.volume(-5)
         self.close_connection()
 
-    def set_vol(self, placement, vol):
+    def vol_down_double(self, placement):
+        self.open_connection(placement)
+        mpcc.volume(-10)
+        self.close_connection()
+
+    def vol_down_triple(self, placement):
+        self.open_connection(placement)
+        mpcc.volume(-20)
+        self.close_connection()
+
+    def vol_set_to(self, placement, vol):
         self.open_connection(placement)
         mpcc.setvol(vol)
         self.close_connection()
@@ -441,10 +457,6 @@ class MyMpdPlaylist(OVOSSkill):
     @intent_handler('pos.intent')
     def handle_switch_to_pos(self, message):
         pos = message.data.get('pos')
-        #pos = extract_numbers(pos); pos = int(pos)
-        #sess = SessionManager.get(message)
-        #location = sess.site_id.lower()
-        #LOG.info("Location: " + str(location))
         placement = self.extract_placement(message)
         if placement != None:
             self.switch_to_pos(placement, pos)
@@ -493,19 +505,43 @@ class MyMpdPlaylist(OVOSSkill):
         if placement != None:
             self.vol_down(placement)
 
+    @intent_handler('vol_down_double.intent')
+    def volume_down_double(self, message):
+        placement = self.extract_placement(message)
+        if placement != None:
+            self.vol_down_double(placement)
+
+    @intent_handler('vol_down_triple.intent')
+    def volume_down_triple(self, message):
+        placement = self.extract_placement(message)
+        if placement != None:
+            self.vol_down_triple(placement)
+
     @intent_handler('vol_up.intent')
     def volume_up(self, message):
         placement = self.extract_placement(message)
         if placement != None:
             self.vol_up(placement)
 
+    @intent_handler('vol_up_double.intent')
+    def volume_up_double(self, message):
+        placement = self.extract_placement(message)
+        if placement != None:
+            self.vol_up_double(placement)
+
+    @intent_handler('vol_up_triple.intent')
+    def volume_up_triple(self, message):
+        placement = self.extract_placement(message)
+        if placement != None:
+            self.vol_up_triple(placement)
+
     @intent_handler('vol_set_to.intent')
-    def volume_set(self, message):
+    def volume_set_to(self, message):
         placement = self.extract_placement(message)
         vol = message.data.get('pos_nr')
         vol = extract_numbers(vol); vol = int(vol)
         if placement != None:
-            self.set_vol(placement, vol)
+            self.vol_set_to(placement, vol)
 
     @intent_handler('info_current_title.intent')
     def handle_speak_title(self, message):
@@ -520,13 +556,11 @@ class MyMpdPlaylist(OVOSSkill):
             answer = self.list_stored_playlists(placement)
             self.speak(answer)
             playlist = self.get_response('which_playlist_to_play', num_retries=0)
-            LOG.info(f"Playliste aus Listenansage: {playlist}")
             if playlist == None:
                 self.speak_dialog('cancel')
                 pass
             else:
                 pos_nr = self.get_response('which_position_to_play', num_retries=1)
-                LOG.info(f"Position: {pos_nr}")
                 if pos_nr == None:
                     pos_nr = 1
                     self.speak_dialog('starting_with_number_one')
@@ -619,8 +653,6 @@ class MyMpdPlaylist(OVOSSkill):
                                 title = 0
                                 self.play_from_database_search(placement, search_result[0], title)
                             else:
-                                #title = extract_numbers(title)
-                                LOG.info("Listenplatz aus Database_Dialog: " + str(title))
                                 title = int(title) -1
                                 self.play_from_database_search(placement, search_result[0], title)
                         else: self.speak_dialog('no_result', {'query': query, 'selection': selection})
