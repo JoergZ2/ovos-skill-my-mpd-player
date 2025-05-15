@@ -535,13 +535,26 @@ class MyMpdPlaylist(OVOSSkill):
         if placement != None:
             self.vol_up_triple(placement)
 
-    @intent_handler('vol_set_to.intent')
+#    @intent_handler('vol_set_to.intent')
+#    def volume_set_to(self, message):
+#        placement = self.extract_placement(message)
+#        vol = message.data.get('pos_nr')
+#        vol = extract_numbers(vol); vol = int(vol)
+#        if placement != None:
+#            self.vol_set_to(placement, vol)
+
+    @intent_handler(IntentBuilder(vol_set_toIntent)
+                   .require(Action)
+                   .require(Value)
+                   .optionally(Placement)
+                   )
     def volume_set_to(self, message):
-        placement = self.extract_placement(message)
+        LOG.info("Message: " + str(message))
         vol = message.data.get('pos_nr')
         vol = extract_numbers(vol); vol = int(vol)
         if placement != None:
             self.vol_set_to(placement, vol)
+    
 
     @intent_handler('info_current_title.intent')
     def handle_speak_title(self, message):
