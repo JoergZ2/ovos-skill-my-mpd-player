@@ -538,8 +538,9 @@ class MyMpdPlaylist(OVOSSkill):
     @intent_handler('vol_set_to.intent')
     def volume_set_to(self, message):
         placement = self.extract_placement(message)
-        vol = message.data.get('pos_nr')
-        vol = extract_numbers(vol); vol = int(vol)
+        vol = message.data.get('value')
+        #vol = extract_numbers(vol)
+        vol = int(vol)
         if placement != None:
             self.vol_set_to(placement, vol)
 

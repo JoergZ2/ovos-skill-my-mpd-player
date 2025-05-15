@@ -1,1 +1,2 @@
-lautstärke (an dem|am) (mpd|radio) (im|in der|) ({placement}|) auf den wert {pos_nr}
+am radio (im|in der|) ({placement}|) (drehe|stelle) lautstärke auf {value}
+(drehe|stelle) die lautstärke am radio (im|in der|) ({placement|}) auf {value}
