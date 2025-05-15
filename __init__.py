@@ -46,6 +46,8 @@ class MyMpdPlaylist(OVOSSkill):
                                    no_gui_fallback=False)
 
     def initialize(self):
+        self.register_entity_file('placement.entity')
+        self.register_entity_file('value.entity')
         self.settings.merge(DEFAULT_SETTINGS, new_only=True)
         self.settings_change_callback = self.on_settings_changed
         self.on_settings_changed()
