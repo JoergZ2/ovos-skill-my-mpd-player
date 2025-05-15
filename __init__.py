@@ -543,10 +543,10 @@ class MyMpdPlaylist(OVOSSkill):
 #        if placement != None:
 #            self.vol_set_to(placement, vol)
 
-    @intent_handler(IntentBuilder(vol_set_toIntent)
-                   .require(Action)
-                   .require(Value)
-                   .optionally(Placement)
+    @intent_handler(IntentBuilder('vol_set_toIntent')
+                   .require('Action')
+                   .require('Value')
+                   .optionally('Placement')
                    )
     def volume_set_to(self, message):
         LOG.info("Message: " + str(message))
