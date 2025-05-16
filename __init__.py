@@ -555,8 +555,9 @@ class MyMpdPlaylist(OVOSSkill):
         placement = self.extract_placement(message)
         if placement != None:
             answer = self.list_stored_playlists(placement)
+            self.speak_dialog('intro_lists')
             self.speak(answer)
-            playlist = self.get_response('which_playlist_to_play', num_retries=0)
+            playlist = self.get_response('which_playlist_to_play', num_retries=1)
             if playlist == None:
                 self.speak_dialog('cancel')
                 pass
@@ -568,18 +569,6 @@ class MyMpdPlaylist(OVOSSkill):
                     self.playlist_replace_and_play(placement, playlist, pos_nr)
                 else:
                     self.playlist_replace_and_play(placement, playlist, pos_nr)
-
-    @intent_handler('playlist_replace_and_play.intent')
-    def handle_playlist_replace_and_play(self, message):
-        playlist = message.data.get('playlist')
-        pos = message.data.get('pos_nr')
-        self.show_raw_message(message)
-        LOG.info("Postionsnummer aus playlist_replace: " + str(pos))
-        #pos = extract_numbers(pos)
-        #pos = int(pos)
-        placement = self.extract_placement(message)
-        if placement != None:
-            self.playlist_replace_and_play(placement, playlist, pos)
 
     @intent_handler('search.intent')
     def handle_search_current_playlist(self, message):
