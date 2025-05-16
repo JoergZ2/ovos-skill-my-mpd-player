@@ -1,3 +1,2 @@
-(spiele|starte|gehe zu|wähle) (platz|position|nummer) {pos} (am|im|) radio [(in der|in dem|in|im)] ({placement}| )
-(spiele|starte|gehe zu|wähle) (platz|position|nummer) {pos} (am|im|) radio (in der|im) der {placement|}
-
+(spiele|starte|gehe zu|wähle) (platz|position|nummer) {pos} am radio (in der|im|) ({placement})
+am radio (im|in der) {placement|} (spiele|starte|gehe zu) (platz|position|nummer) {pos}
