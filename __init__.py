@@ -103,6 +103,11 @@ class MyMpdPlaylist(OVOSSkill):
 
     def extract_placement(self, message):
         sess = SessionManager.get(message)
+        LOG.debug("Session-Information site_id: " + location)
+        LOG.debug("Session-Information active_skills: " + str(sess.active_skills))
+        LOG.debug("Session-Information utterance_state: " + str(sess.utterance_states))
+        LOG.debug("Message: " + str(message))
+        LOG.debug("Message: " + str(message.data))
         location = sess.site_id.lower()
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
@@ -276,7 +281,7 @@ class MyMpdPlaylist(OVOSSkill):
 
     def vol_up_triple(self, placement):
         self.open_connection(placement)
-        mpcc.volume(+20)
+        mpcc.volume(+30)
         self.close_connection()
 
     def vol_down(self, placement):
@@ -291,7 +296,7 @@ class MyMpdPlaylist(OVOSSkill):
 
     def vol_down_triple(self, placement):
         self.open_connection(placement)
-        mpcc.volume(-20)
+        mpcc.volume(-30)
         self.close_connection()
 
     def vol_set_to(self, placement, vol):
@@ -581,6 +586,7 @@ class MyMpdPlaylist(OVOSSkill):
                 if play_title == 'yes':
                     pos_nr = self.get_response('which_position_to_play')
                     pos_nr = extract_numbers(pos_nr)
+                    pos_nr = int(pos_nr[0])
                     self.switch_to_pos(placement, pos_nr)
                 elif play_title == 'no':
                     pass
