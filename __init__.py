@@ -98,7 +98,12 @@ class MyMpdPlaylist(OVOSSkill):
         if result != None:
             return placement
         else:
-            self.speak_dialog('radio_error', {"radio": placement})
+            placement = self.ask_for_radio()
+            placement = self.radios.get(placement, None)
+            if placement != None:
+                return placement
+            else:
+                self.speak_dialog('radio_error', {"radio": placement})
             return
 
     def extract_placement(self, message):
@@ -112,6 +117,11 @@ class MyMpdPlaylist(OVOSSkill):
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
         return placement
+    
+    def ask_for_radio(self):
+        placement = self.get_response('where_to_play', num_retries=1)
+        return placement
+
 
 #Maintaining function
     def show_raw_message(self, message, sess=None):
