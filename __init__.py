@@ -88,6 +88,10 @@ class MyMpdPlaylist(OVOSSkill):
 #replaces device's IP if no placement has been spoken
 #necessary for Hivemind clients
     def check_placement(self, location, placement=None):
+        if not placement and not location:
+            placement = self.ask_for_radio()
+            if placement != None:
+                return placement
         if location != None and placement != None:
             placement = placement.lower()
         if not placement:
@@ -98,16 +102,8 @@ class MyMpdPlaylist(OVOSSkill):
         if result != None:
             return placement
         else:
-            placement = self.ask_for_radio()
-            if placement != None:
-                return placement
-            else:
-                placement = self.ask_for_radio()
-                if placement != None:
-                    return placement
-                else:
-                    self.speak_dialog('radio_error', {"radio": placement})
-                return
+            self.speak_dialog('radio_error', {"radio": placement})
+            return
 
     def extract_placement(self, message):
         sess = SessionManager.get(message)
