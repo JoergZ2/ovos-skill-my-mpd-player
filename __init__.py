@@ -99,7 +99,6 @@ class MyMpdPlaylist(OVOSSkill):
             return placement
         else:
             placement = self.ask_for_radio()
-            placement = self.radios.get(placement, None)
             if placement != None:
                 return placement
             else:
