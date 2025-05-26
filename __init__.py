@@ -88,6 +88,11 @@ class MyMpdPlaylist(OVOSSkill):
 #replaces device's IP if no placement has been spoken
 #necessary for Hivemind clients
     def check_placement(self, location, placement=None):
+        if len(placement.split()) > 1:
+            placement = placement.split()
+            for i in placement:
+                if self.radios[i]:
+                    return i
         if not placement and not location:
             placement = self.ask_for_radio()
             if placement != None:
@@ -108,11 +113,6 @@ class MyMpdPlaylist(OVOSSkill):
     def extract_placement(self, message):
         sess = SessionManager.get(message)
         location = sess.site_id.lower()
-        LOG.debug("Session-Information site_id: " + location)
-        LOG.debug("Session-Information active_skills: " + str(sess.active_skills))
-        LOG.debug("Session-Information utterance_state: " + str(sess.utterance_states))
-        LOG.debug("Message: " + str(message))
-        LOG.debug("Message: " + str(message.data))
         placement = message.data.get('placement', None)
         placement = self.check_placement(location, placement)
         return placement
