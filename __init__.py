@@ -92,7 +92,7 @@ class MyMpdPlaylist(OVOSSkill):
             LOG.info("Placement: " + placement)
             placement = placement.split()
             for i in placement:
-                if i in self.radios[i]:
+                if i in self.radios:
                     return i
         if not placement and not location:
             placement = self.ask_for_radio()
