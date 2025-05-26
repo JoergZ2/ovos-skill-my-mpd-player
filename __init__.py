@@ -89,9 +89,10 @@ class MyMpdPlaylist(OVOSSkill):
 #necessary for Hivemind clients
     def check_placement(self, location, placement=None):
         if len(placement.split()) > 1:
+            LOG.info("Placement: " + placement)
             placement = placement.split()
             for i in placement:
-                if self.radios[i]:
+                if i in self.radios[i]:
                     return i
         if not placement and not location:
             placement = self.ask_for_radio()
