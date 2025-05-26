@@ -88,8 +88,13 @@ class MyMpdPlaylist(OVOSSkill):
 #replaces device's IP if no placement has been spoken
 #necessary for Hivemind clients
     def check_placement(self, location, placement=None):
+        """Checks if placement has more than one word, if so, it splits it and checks if one of the words is in the radios dict.\
+            Checks if placement AND location are empty, if so, it asks the user for a radio placement.\
+            If one is valid it will be taken.\
+            placement should come from utterance and location should com from Hivemind (siteid) if no placement is spoken.\
+            Function corrects Padatious errors."""
         if len(placement.split()) > 1:
-            LOG.info("Placement: " + placement)
+            LOG.debug("Placement from check_placement(): " + placement)
             placement = placement.split()
             for i in placement:
                 if i in self.radios:
