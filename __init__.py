@@ -97,7 +97,7 @@ class MyMpdPlaylist(OVOSSkill):
             If one is valid it will be taken.\
             placement should come from utterance and location should com from Hivemind (siteid) if no placement is spoken.\
             Function corrects Padatious errors."""
-        if len(placement.split()) > 1:
+        if placement != None and len(placement.split()) > 1:
             LOG.debug("Placement from check_placement(): " + placement)
             placement = placement.split()
             for i in placement:
