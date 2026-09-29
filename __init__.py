@@ -4,7 +4,7 @@ import time
 from ovos_workshop.skills import OVOSSkill
 from ovos_workshop.decorators import intent_handler
 from ovos_workshop.intents import IntentBuilder
-from ovos_lingua_franca.parse import extract_numbers
+from lingua_franca.parse import extract_numbers
 from ovos_bus_client.session import SessionManager
 from mpd import MPDClient
 from mpd import CommandError as mce
